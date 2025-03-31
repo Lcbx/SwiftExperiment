@@ -1,0 +1,3 @@
+[submodule "extern/ginseng-ecs"]
+	path = extern/ginseng-ecs
+	url = https://github.com/apples/ginseng.git
