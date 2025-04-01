@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 
 
-project(SwiftEngine LANGUAGES CXX Swift)
+project(SwiftEngine LANGUAGES Swift CXX C)
 
 # Verify that we have a new enough compiler
 if("${CMAKE_Swift_COMPILER_VERSION}" VERSION_LESS 5.9)
@@ -16,12 +16,9 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
-# Set up swiftrt.o and runtime library search paths
+# from https://github.com/apple/swift-cmake-examples
 include(InitializeSwift)
-# cmake/modules/AddSwift.cmake provides the function for creating the Swift to
-# C++ bridging header
 include(AddSwift)
-
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET 13.0)
 set(CMAKE_CXX_STANDARD 17)
@@ -30,4 +27,6 @@ add_subdirectory(extern)
 
 add_executable(swiftEngine main.swift)
 target_compile_options(swiftEngine PRIVATE -cxx-interoperability-mode=default)
+#target_compile_options(swiftEngine PRIVATE -I raylib-5.5_win32_mingw-w64/include -L raylib-5.5_win32_mingw-w64/lib -Xlinker raylib-5.5_win32_mingw-w64/lib/libraylib.a -Xlinker -lraylib)
 target_link_libraries(swiftEngine PRIVATE ginseng)
+target_link_libraries(swiftEngine PRIVATE raylib)

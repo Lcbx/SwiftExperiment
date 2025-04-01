@@ -1,0 +1,3 @@
+module raylib {
+  header "raylib.h"
+}
