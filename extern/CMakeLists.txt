@@ -1,6 +1,5 @@
 
 add_subdirectory(ginseng-ecs)
-add_subdirectory(raylib)
 
 
 # using virtual file system to inject the modulemap
@@ -19,5 +18,6 @@ endfunction()
 
 install_modulemap(ginseng "ginseng-ecs/include/ginseng")
 
-target_compile_options(raylib INTERFACE -lgdi32)
-install_modulemap(raylib "raylib/src")
+# does not work, missing system links
+#target_compile_options(raylib INTERFACE -lgdi32)
+#install_modulemap(raylib "raylib/src")
