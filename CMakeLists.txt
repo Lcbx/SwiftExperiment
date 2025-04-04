@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 
 
+# based on https://github.com/apple/swift-cmake-examples
 project(SwiftEngine LANGUAGES Swift CXX C)
 
 # Verify that we have a new enough compiler
@@ -14,11 +15,9 @@ if(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" AND
   Have ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-
-# from https://github.com/apple/swift-cmake-examples
-include(InitializeSwift)
-include(AddSwift)
+#list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+#include(InitializeSwift)
+#include(AddSwift)
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET 13.0)
 set(CMAKE_CXX_STANDARD 17)
@@ -26,7 +25,12 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(extern)
 
 add_executable(swiftEngine main.swift)
+
 target_compile_options(swiftEngine PRIVATE -cxx-interoperability-mode=default)
-#target_compile_options(swiftEngine PRIVATE -I raylib-5.5_win32_mingw-w64/include -L raylib-5.5_win32_mingw-w64/lib -Xlinker raylib-5.5_win32_mingw-w64/lib/libraylib.a -Xlinker -lraylib)
+
 target_link_libraries(swiftEngine PRIVATE ginseng)
-target_link_libraries(swiftEngine PRIVATE raylib)
+
+
+# not elegant, but gentlemen, we have flight
+configure_file("extern/raylib_dll/raylib.dll" "raylib.dll" COPYONLY)
+target_compile_options(swiftEngine PRIVATE -I ${CMAKE_CURRENT_SOURCE_DIR}/extern/raylib_dll -L ${CMAKE_CURRENT_SOURCE_DIR}/extern/raylib_dll -Xlinker ${CMAKE_CURRENT_SOURCE_DIR}/extern/raylib_dll/raylib.lib )
